@@ -3,7 +3,7 @@
 // Just the big title area at the top.
 // No logic here — purely visual.
 // ─────────────────────────────────────────────
-import './HeroSection.css'
+import "./HeroSection.css";
 
 export default function HeroSection() {
   return (
@@ -11,13 +11,14 @@ export default function HeroSection() {
       <div className="hero-glow" />
       <div className="badge">World Kitchen</div>
       <h1 className="hero-title">
-        Every tribe.<br />
-        <em>Every taste.</em>
+        Travel the world.
+        <br />
+        <em>Through foodn.</em>
       </h1>
       <p className="hero-sub">
         Enter a country and ethnic group. Customize by diet, protein, season,
         and occasion for a full 3-course menu made entirely from scratch.
       </p>
     </div>
-  )
+  );
 }

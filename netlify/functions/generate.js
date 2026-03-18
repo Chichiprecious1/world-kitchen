@@ -1,41 +1,32 @@
-// netlify/functions/generate.js
-// ─────────────────────────────────────────────────────────
-// This is a "serverless function" - it runs on Netlify's
-// servers, NOT in the browser. That's why the API key is
-// safe here. The browser never sees it.
-// ─────────────────────────────────────────────────────────
-
-export default async (req) => {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 })
+exports.handler = async function (event) {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
   }
-
-  // Get the request body from the frontend
-  const body = await req.json()
 
   try {
-    // Make the call to Anthropic using our secret key
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
+    const body = JSON.parse(event.body);
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY, // 🔒 Secret - lives on server only
-        'anthropic-version': '2023-06-01',
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify(body),
-    })
+    });
 
-    const data = await response.json()
-    return Response.json(data)
+    const data = await response.json();
 
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
   } catch (error) {
-    return Response.json(
-      { error: 'Failed to generate meal. Please try again.' },
-      { status: 500 }
-    )
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed to generate meal" }),
+    };
   }
-}
-
-// This tells Netlify what URL to assign this function
-export const config = { path: '/api/generate' }
+};
