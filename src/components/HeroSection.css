@@ -1,0 +1,64 @@
+/* src/components/HeroSection.css */
+
+.hero-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 80px 24px 0;
+  position: relative;
+}
+
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 700px 500px at 50% 40%, rgba(224,122,69,0.06) 0%, transparent 70%);
+}
+
+.badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  position: relative;
+}
+.badge::before,
+.badge::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.4;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: clamp(48px, 9vw, 108px);
+  line-height: 0.85;
+  letter-spacing: -4px;
+  color: var(--text);
+  margin-bottom: 20px;
+  position: relative;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-soft);
+  max-width: 420px;
+  line-height: 1.7;
+  margin-bottom: 52px;
+  font-weight: 400;
+  position: relative;
+}

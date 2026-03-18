@@ -1,0 +1,31 @@
+/* src/App.css */
+
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.error-icon {
+  font-size: 48px;
+}
+
+.btn-outline {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: none;
+  border: 1px solid rgba(224,122,69,0.3);
+  border-radius: 100px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.btn-outline:hover { background: var(--accent-glow); }
