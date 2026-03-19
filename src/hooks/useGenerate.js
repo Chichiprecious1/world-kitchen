@@ -45,69 +45,12 @@ export function useGenerate() {
       .filter(Boolean)
       .join("\n");
 
-    const prompt = `You are an expert in world cuisines and tribal cooking traditions.
+const prompt = `You are a world cuisine expert. Create a 3-course meal for ${tribe ? tribe + ' people from ' + country : country}.
+Diet: ${diet}. Protein: ${proteinsText}. Dessert: ${dessert}.
+${season ? 'Season: ' + season : ''} ${holiday ? 'Occasion: ' + holiday : ''}
 
-${contextLines}
-
-Create a 3-course meal (Appetizer, Entrée, Dessert) that is:
-- Deeply authentic to the specific ethnic group or tribe (not just generic national food)
-- All ingredients made entirely from scratch — no frozen, store-bought, or pre-made items
-- Diet must be strictly followed: ${diet}
-- Dessert MUST respect the temperature preference: ${dessert}
-- If vegan, every dish must be fully plant-based
-
-Respond ONLY with valid JSON. No markdown backticks, no explanation.
-
-{
-  "country": "string",
-  "tribe": "string or empty string",
-  "flag": "emoji",
-  "tagline": "short poetic phrase under 10 words",
-  "tribalNote": "1 sentence about what makes this group's cooking unique",
-  "facts": [
-    { "icon": "emoji", "label": "label", "text": "fact about this tribe's food" },
-    { "icon": "emoji", "label": "label", "text": "culinary fact" },
-    { "icon": "emoji", "label": "label", "text": "cultural food fact" }
-  ],
-  "courses": [
-    {
-      "type": "Appetizer",
-      "name": "English name",
-      "native": "name in local language if known",
-      "description": "2-3 sentences describing the dish and its cultural origin",
-      "time": "cook time",
-      "method": "cooking technique",
-      "highlight": "hero ingredient or technique",
-      "ingredients": ["item", "SECTION:Subsection", "item under that section"],
-      "steps": ["Detailed step 1", "Detailed step 2"]
-    },
-    { "type": "Entrée",  "name": "...", "native": "...", "description": "...", "time": "...", "method": "...", "highlight": "...", "ingredients": [], "steps": [] },
-    { "type": "Dessert", "name": "...", "native": "...", "description": "...", "time": "...", "method": "...", "highlight": "...", "ingredients": [], "steps": [] }
-  ],
-  "shopping": {
-    "🥩 Meat & Protein":  [{ "name": "item", "amount": "qty" }],
-    "🌿 Produce":         [{ "name": "item", "amount": "qty" }],
-    "🫙 Pantry & Dry":    [{ "name": "item", "amount": "qty" }],
-    "🌶️ Spices":          [{ "name": "item", "amount": "qty" }],
-    "🥛 Dairy & Fats":    [{ "name": "item", "amount": "qty" }],
-    "🛒 Other":           [{ "name": "item", "amount": "qty" }]
-  }
-}`;
-
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 2000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-
-      const data = await response.json();
-      console.log("API response:", data); // ← add this line
-
+Respond ONLY in valid JSON, no backticks:
+{"country":"","tribe":"","flag":"","tagline":"","tribalNote":"","facts":[{"icon":"","label":"","text":""}],"courses":[{"type":"Appetizer","name":"","native":"","description":"","time":"","method":"","highlight":"","ingredients":[""],"steps":[""]},{"type":"Entrée","name":"","native":"","description":"","time":"","method":"","highlight":"","ingredients":[""],"steps":[""]},{"type":"Dessert","name":"","native":"","description":"","time":"","method":"","highlight":"","ingredients":[""],"steps":[""]}],"shopping":{"🥩 Meat":[{"name":"","amount":""}]}}`
       if (data.error) {
         setError("API Error: " + (data.error.message || data.error));
         return;
