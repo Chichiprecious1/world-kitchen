@@ -4,20 +4,29 @@
 // We put the API call here so App.jsx stays clean.
 // Any component can call useGenerate() to get this logic.
 // ─────────────────────────────────────────────────────────
-import { useState } from 'react'
+import { useState } from "react";
 
 export function useGenerate() {
-  const [loading, setLoading] = useState(false)   // is it loading?
-  const [result, setResult]   = useState(null)    // the meal data
-  const [error, setError]     = useState(null)    // any error message
+  const [loading, setLoading] = useState(false); // is it loading?
+  const [result, setResult] = useState(null); // the meal data
+  const [error, setError] = useState(null); // any error message
 
-  async function generate({ country, tribe, diet, dessert, proteins, season, holiday }) {
-    setLoading(true)
-    setResult(null)
-    setError(null)
+  async function generate({
+    country,
+    tribe,
+    diet,
+    dessert,
+    proteins,
+    season,
+    holiday,
+  }) {
+    setLoading(true);
+    setResult(null);
+    setError(null);
 
     // Build a readable context string for the prompt
-    const proteinsText = proteins.length > 0 ? proteins.join(', ') : "chef's choice"
+    const proteinsText =
+      proteins.length > 0 ? proteins.join(", ") : "chef's choice";
     const contextLines = [
       `Country: ${country}`,
       tribe
@@ -26,9 +35,15 @@ export function useGenerate() {
       `Diet: ${diet}`,
       `Protein preference: ${proteinsText}`,
       `Dessert temperature: ${dessert}`,
-      season  ? `Season: ${season} — use seasonal produce typical for this season in this culture` : '',
-      holiday ? `Occasion: ${holiday} — choose dishes traditionally made for this celebration` : '',
-    ].filter(Boolean).join('\n')
+      season
+        ? `Season: ${season} — use seasonal produce typical for this season in this culture`
+        : "",
+      holiday
+        ? `Occasion: ${holiday} — choose dishes traditionally made for this celebration`
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     const prompt = `You are an expert in world cuisines and tribal cooking traditions.
 
@@ -77,36 +92,36 @@ Respond ONLY with valid JSON. No markdown backticks, no explanation.
     "🥛 Dairy & Fats":    [{ "name": "item", "amount": "qty" }],
     "🛒 Other":           [{ "name": "item", "amount": "qty" }]
   }
-}`
+}`;
 
     try {
-      // Call our Netlify Function (NOT Anthropic directly - key is safe on server)
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: "claude-sonnet-4-20250514",
           max_tokens: 4500,
-          messages: [{ role: 'user', content: prompt }],
+          messages: [{ role: "user", content: prompt }],
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
+      console.log("API response:", data); // ← add this line
 
-      // Extract the text from Anthropic's response format
-      const raw   = data.content.map(b => b.text || '').join('')
-      const clean = raw.replace(/```json|```/gi, '').trim()
-      const meal  = JSON.parse(clean)
+      if (data.error) {
+        setError("API Error: " + (data.error.message || data.error));
+        return;
+      }
 
-      setResult(meal)
-
+      const raw = data.content.map((b) => b.text || "").join("");
+      const clean = raw.replace(/```json|```/gi, "").trim();
+      const meal = JSON.parse(clean);
+      setResult(meal);
     } catch (err) {
-      console.error(err)
-      setError('Something went wrong generating the meal. Please try again.')
-    } finally {
-      setLoading(false)
+      console.error("Full error:", err);
+      setError("Something went wrong. Please try again.");
     }
   }
 
-  return { generate, loading, result, error, reset: () => setResult(null) }
+  return { generate, loading, result, error, reset: () => setResult(null) };
 }
