@@ -30,7 +30,7 @@ Reply ONLY with this JSON (no backticks):
 {"country":"${country}","tribe":"${tribe || ""}","flag":"emoji","tagline":"short phrase","tribalNote":"one sentence","facts":[{"icon":"emoji","label":"label","text":"fact"},{"icon":"emoji","label":"label","text":"fact"},{"icon":"emoji","label":"label","text":"fact"}],"courses":[{"type":"Appetizer","name":"","native":"","description":"2 sentences","time":"","method":"","highlight":"","ingredients":["ing1","ing2","SECTION:Sauce","ing3"],"steps":["step1","step2","step3"]},{"type":"Entrée","name":"","native":"","description":"2 sentences","time":"","method":"","highlight":"","ingredients":["ing1","ing2"],"steps":["step1","step2","step3"]},{"type":"Dessert","name":"","native":"","description":"2 sentences","time":"","method":"","highlight":"","ingredients":["ing1","ing2"],"steps":["step1","step2","step3"]}],"shopping":{"🥩 Meat":[{"name":"item","amount":"qty"}],"🌿 Produce":[{"name":"item","amount":"qty"}],"🫙 Pantry":[{"name":"item","amount":"qty"}],"🌶️ Spices":[{"name":"item","amount":"qty"}]}}`;
 
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
