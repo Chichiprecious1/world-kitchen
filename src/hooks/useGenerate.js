@@ -19,10 +19,12 @@ export function useGenerate() {
     setResult(null);
     setError(null);
 
-    const who = tribe ? `${tribe} people from ${country}` : country;
+    const who = tribe
+      ? `the ${tribe} ethnic group specifically from ${country}`
+      : country;
     const p = proteins.length > 0 ? proteins.join(", ") : "any";
 
-    const prompt = `Create a 3-course meal for ${who}. Diet: ${diet}. Protein: ${p}. Dessert must be: ${dessert}.${season ? ` Season: ${season}.` : ""}${holiday ? ` Occasion: ${holiday}.` : ""}
+    const prompt = `Create a 3-course meal using ONLY traditional dishes from the ${tribe ? tribe + " ethnic group of " + country : country}. ${tribe ? `Every dish MUST be specific to ${tribe} culture and tradition — do NOT include dishes from other South African groups like Afrikaner, Cape Malay, or Xhosa.` : ""} Diet: ${diet}. Protein: ${p}. Dessert must be: ${dessert}.${season ? ` Season: ${season}.` : ""}${holiday ? ` Occasion: ${holiday}.` : ""}
 
 Reply ONLY with this JSON (no backticks):
 {"country":"${country}","tribe":"${tribe || ""}","flag":"emoji","tagline":"short phrase","tribalNote":"one sentence","facts":[{"icon":"emoji","label":"label","text":"fact"},{"icon":"emoji","label":"label","text":"fact"},{"icon":"emoji","label":"label","text":"fact"}],"courses":[{"type":"Appetizer","name":"","native":"","description":"2 sentences","time":"","method":"","highlight":"","ingredients":["ing1","ing2","SECTION:Sauce","ing3"],"steps":["step1","step2","step3"]},{"type":"Entrée","name":"","native":"","description":"2 sentences","time":"","method":"","highlight":"","ingredients":["ing1","ing2"],"steps":["step1","step2","step3"]},{"type":"Dessert","name":"","native":"","description":"2 sentences","time":"","method":"","highlight":"","ingredients":["ing1","ing2"],"steps":["step1","step2","step3"]}],"shopping":{"🥩 Meat":[{"name":"item","amount":"qty"}],"🌿 Produce":[{"name":"item","amount":"qty"}],"🫙 Pantry":[{"name":"item","amount":"qty"}],"🌶️ Spices":[{"name":"item","amount":"qty"}]}}`;
