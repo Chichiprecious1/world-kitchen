@@ -35,7 +35,7 @@ Reply ONLY with this JSON (no backticks):
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-haiku-4-5-20251001",
-          max_tokens: 2000,
+          max_tokens: 3000,
           messages: [{ role: "user", content: prompt }],
         }),
       });
@@ -47,8 +47,9 @@ Reply ONLY with this JSON (no backticks):
         return;
       }
 
-      const raw = data.content.map((b) => b.text || "").join("");
-      const clean = raw.replace(/```json|```/gi, "").trim();
+      const start = raw.indexOf("{");
+      const end = raw.lastIndexOf("}");
+      const clean = raw.slice(start, end + 1);
       const meal = JSON.parse(clean);
       setResult(meal);
     } catch (err) {
